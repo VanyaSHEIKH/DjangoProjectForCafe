@@ -1,0 +1,54 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<div class="revenue-container">
+    <h1>Отчёт по выручке</h1>
+    
+    <div class="revenue-summary">
+        <h2>Итоговая выручка: {{ total_revenue|default:"0" }}₽</h2>
+        <p class="info-text">Только оплаченные заказы</p>
+    </div>
+
+    <div class="filters">
+        <form method="get" class="date-filter">
+            <label for="date">Фильтр по дате:</label>
+            <input type="date" name="date" id="date" value="{{ request.GET.date }}">
+            <button type="submit" class="btn">Применить</button>
+            <a href="{% url 'revenue' %}" class="btn">Сбросить</a>
+        </form>
+    </div>
+
+    <table class="revenue-table">
+        <thead>
+            <tr>
+                <th>ID заказа</th>
+                <th>Стол</th>
+                <th>Сумма</th>
+                <th>Дата оплаты</th>
+                <th>Детали заказа</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in paid_orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.table_number }}</td>
+                <td>{{ order.total_price }}₽</td>
+                <td>{{ order.updated_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    <ul class="order-items">
+                        {% for item in order.items %}
+                        <li>{{ item.name }} - {{ item.price }}₽ × {{ item.quantity|default:1 }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Нет оплаченных заказов</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>Удаление заказа</h1>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Вы действительно хотите удалить заказ #{{ order.id }} (Стол {{ order.table_number }}) со следующими блюдами:</p>
+    <ul>
+        {% for item in order.items %}
+        <li>{{ item.name }} - {{ item.price }}₽ × {{ item.quantity|default:1 }}</li>
+        {% endfor %}
+    </ul>
+    <p>Общая сумма: {{ order.total_price }}₽</p>
+    <div class="action-buttons">
+        <input type="submit" value="Да, удалить" class="btn btn-danger">
+        <a href="{% url 'order_list' %}" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock content %}

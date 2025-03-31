@@ -1,0 +1,65 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Редактирование заказа #{{ object.id }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Информация о столе (только для чтения) -->
+        <div class="mb-3">
+            <label class="form-label">Номер стола:</label>
+            <input type="text" value="{{ object.table_number }}" class="form-control" readonly>
+        </div>
+
+        <!-- Текущий статус -->
+        <div class="mb-3">
+            <label class="form-label">Статус:</label>
+            <input type="text" value="{{ object.get_status_display }}" class="form-control" readonly>
+        </div>
+
+        <!-- Таблица блюд -->
+        <h3>Блюда в заказе:</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in object.items %}
+                <tr>
+                    <td><input type="text" name="dish_name" value="{{ item.name }}" class="form-control"></td>
+                    <td><input type="number" name="dish_price" value="{{ item.price }}" step="0.01" class="form-control"></td>
+                    <td><input type="number" name="dish_quantity" value="{{ item.quantity }}" min="1" class="form-control"></td>
+                    <td class="text-center"><input type="checkbox" name="dish_delete" value="{{ forloop.counter0 }}" class="form-check-input"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Добавление нового блюда -->
+        <h3>Добавить блюдо:</h3>
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <input type="text" name="new_dish_name" placeholder="Название" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="new_dish_price" placeholder="Цена" step="0.01" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="new_dish_quantity" placeholder="Количество" value="1" min="1" class="form-control">
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 d-md-block">
+            <button type="submit" class="btn btn-success">Сохранить изменения</button>
+            <a href="{% url 'order_list' %}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

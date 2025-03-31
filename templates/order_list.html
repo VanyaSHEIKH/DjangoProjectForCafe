@@ -1,0 +1,57 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>Список заказов</h1>
+
+<form method="get" class="search-form">
+    <select name="search_type">
+        <option value="all">Все</option>
+        <option value="id">По ID</option>
+        <option value="table">По столу</option>
+    </select>
+    <input type="text" name="search" placeholder="Введите запрос">
+    <button type="submit">Найти</button>
+</form>
+
+<a href="{% url 'order_create' %}" class="btn">Создать заказ</a>
+<a href="{% url 'revenue' %}" class="btn">Выручка</a>
+
+<table class="order-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Стол</th>
+            <th>Блюда</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.table_number }}</td>
+            <td>
+                <ul>
+                    {% for item in order.items %}
+                    <li>{{ item.name }} - {{ item.price }}₽ x{{ item.quantity|default:1 }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{ order.total_price }}₽</td>
+            <td class="status-{{ order.status }}">{{ order.get_status_display }}</td>
+            <td>
+                <a href="{% url 'order_status_update' order.id %}" class="btn">Изменить статус</a>
+                <a href="{% url 'order_delete' order.id %}" class="btn danger">Удалить</a>
+                <a href="{% url 'order_edit' order.id %}" class="btn">Изменить заказ</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">Нет заказов</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
