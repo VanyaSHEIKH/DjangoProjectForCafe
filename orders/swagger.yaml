@@ -1,0 +1,315 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Your API",
+    "description": "Test description",
+    "termsOfService": "https://www.google.com/policies/terms/",
+    "contact": {
+      "email": "contact@yourapi.local"
+    },
+    "license": {
+      "name": "BSD License"
+    },
+    "version": "v1"
+  },
+  "host": "127.0.0.1:8000",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/api",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Basic": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "Basic": []
+    }
+  ],
+  "paths": {
+    "/SubmitData/": {
+      "get": {
+        "operationId": "SubmitData_list",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Order"
+              }
+            }
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "post": {
+        "operationId": "SubmitData_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "parameters": []
+    },
+    "/SubmitData/revenue/": {
+      "get": {
+        "operationId": "SubmitData_revenue",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Order"
+              }
+            }
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "parameters": []
+    },
+    "/SubmitData/{id}/": {
+      "get": {
+        "operationId": "SubmitData_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "put": {
+        "operationId": "SubmitData_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "patch": {
+        "operationId": "SubmitData_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "delete": {
+        "operationId": "SubmitData_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "A unique integer value identifying this Заказ.",
+          "required": true,
+          "type": "integer"
+        }
+      ]
+    },
+    "/SubmitData/{id}/status/": {
+      "patch": {
+        "operationId": "SubmitData_status",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "SubmitData"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "A unique integer value identifying this Заказ.",
+          "required": true,
+          "type": "integer"
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "OrderItem": {
+      "required": [
+        "name",
+        "price"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "price": {
+          "title": "Price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "quantity": {
+          "title": "Quantity",
+          "type": "integer",
+          "default": 1,
+          "minimum": 1
+        }
+      }
+    },
+    "Order": {
+      "required": [
+        "table_number",
+        "items"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "table_number": {
+          "title": "Номер стола",
+          "description": "Введите номер стола (1, 2, 3...)",
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem"
+          }
+        },
+        "total_price": {
+          "title": "Общая сумма",
+          "type": "string",
+          "format": "decimal",
+          "readOnly": true
+        },
+        "status": {
+          "title": "Статус",
+          "type": "string",
+          "enum": [
+            "pending",
+            "ready",
+            "paid"
+          ]
+        },
+        "created_at": {
+          "title": "Дата создания",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Дата обновления",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    }
+  }
+}
