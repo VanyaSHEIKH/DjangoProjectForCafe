@@ -2,7 +2,8 @@ from django import forms
 from .models import Order
 import json
 
-#Создание нового заказа
+
+# Создание нового заказа
 class OrderForm(forms.ModelForm):
     items_json = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 3, 'placeholder': '[{"name":"Блюдо","price":100,"quantity":1}]'}),
@@ -16,7 +17,7 @@ class OrderForm(forms.ModelForm):
             'table_number': forms.NumberInput(attrs={'min': 1})
         }
 
-    #валидация JSON строки с блюдами
+    # валидация JSON строки с блюдами
     def clean_items_json(self):
         data = self.cleaned_data['items_json']
         try:
@@ -30,7 +31,7 @@ class OrderForm(forms.ModelForm):
                 if not isinstance(item, dict):
                     raise forms.ValidationError("Каждый элемент должен быть объектом")
 
-                #Проверка обязательных полей
+                # Проверка обязательных полей
                 if 'name' not in item or not item['name']:
                     raise forms.ValidationError("Укажите название блюда")
 
@@ -45,7 +46,7 @@ class OrderForm(forms.ModelForm):
             raise forms.ValidationError(
                 f"Неверный JSON формат. Ошибка: {str(e)}. Пример: [{"name\":\"Кофе\",\"price":150}]")
 
-    #Сохранение заказа
+    # Сохранение заказа
     def save(self, commit=True):
         order = super().save(commit=False)
         order.items = self.cleaned_data['items_json']
@@ -53,7 +54,7 @@ class OrderForm(forms.ModelForm):
             order.save()
         return order
 
-    #Проверка занятости стола
+    # Проверка занятости стола
     def clean_table_number(self):
         table_number = self.cleaned_data['table_number']
         status = self.cleaned_data.get('status', 'pending')
@@ -75,7 +76,8 @@ class OrderForm(forms.ModelForm):
 
         return table_number
 
-#Изменение статуса заказа, только поле статус доступно для изменения
+
+# Изменение статуса заказа, только поле статус доступно для изменения
 class OrderStatusForm(forms.ModelForm):
     class Meta:
         model = Order
@@ -87,7 +89,8 @@ class OrderStatusForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-control'})
         }
 
-#Изменение заказа
+
+# Изменение заказа
 class OrderEditForm(forms.ModelForm):
     class Meta:
         model = Order
@@ -97,7 +100,7 @@ class OrderEditForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         print("Доступные поля формы:", self.fields.keys())  # Отладочная печать
 
-        #Динамическое создание полей для каждого блюда
+        # Динамическое создание полей для каждого блюда
         if self.instance and hasattr(self.instance, 'items'):
             for i, item in enumerate(self.instance.items):
                 self.fields[f'dish_{i}_name'] = forms.CharField(
@@ -110,7 +113,7 @@ class OrderEditForm(forms.ModelForm):
                     label='Удалить',
                     required=False)
 
-        #Поля для добавления нового блюда
+        # Поля для добавления нового блюда
         self.fields['new_dish_name'] = forms.CharField(label='Новое блюдо', required=False)
         self.fields['new_dish_quantity'] = forms.IntegerField(
             label='Количество',

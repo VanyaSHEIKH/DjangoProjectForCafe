@@ -9,14 +9,7 @@
         <p class="info-text">Только оплаченные заказы</p>
     </div>
 
-    <div class="filters">
-        <form method="get" class="date-filter">
-            <label for="date">Фильтр по дате:</label>
-            <input type="date" name="date" id="date" value="{{ request.GET.date }}">
-            <button type="submit" class="btn">Применить</button>
-            <a href="{% url 'revenue' %}" class="btn">Сбросить</a>
-        </form>
-    </div>
+
 
     <table class="revenue-table">
         <thead>

@@ -15,14 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include, re_path
+from django.urls import path, include, re_path
 from rest_framework import routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from orders import viewsets
 
-router=routers.DefaultRouter()
-router.register(r'SubmitData',viewsets.OrderViewSet, basename='order')
+router = routers.DefaultRouter()
+router.register(r'SubmitData', viewsets.OrderViewSet, basename='order')
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -35,7 +35,6 @@ schema_view = get_schema_view(
     ),
     public=True,
 )
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -59,4 +58,3 @@ urlpatterns = [
         name='schema-redoc'
     ),
 ]
-

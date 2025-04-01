@@ -6,14 +6,15 @@ from .models import Order
 from .forms import OrderForm, OrderStatusForm, OrderEditForm
 from django.contrib import messages
 
-#Список заказов с поиском по номеру заказа и стола
+
+# Список заказов с поиском по номеру заказа и стола
 class OrderList(ListView):
     model = Order
     template_name = 'order_list.html'
     context_object_name = 'orders'
     paginate_by = 10
 
-    #Добавляет поиск по номеру заказа иои стола
+    # Добавляет поиск по номеру заказа иои стола
     def get_queryset(self):
         queryset = super().get_queryset()
         search_query = self.request.GET.get('search', '').strip()
@@ -33,7 +34,8 @@ class OrderList(ListView):
         context['search_query'] = self.request.GET.get('search', '')
         return context
 
-#Создает новый заказ
+
+# Создает новый заказ
 class OrderCreate(CreateView):
     """
     Создание нового заказа
@@ -43,29 +45,33 @@ class OrderCreate(CreateView):
     template_name = 'order_create.html'  # Шаблон формы
     success_url = reverse_lazy('order_list')  # Куда перейти после успеха
 
-    #Устанавливает статус pending по умолчанию
+    # Устанавливает статус pending по умолчанию
     def form_valid(self, form):
         form.instance.status = 'pending'
         return super().form_valid(form)
-    #Обработка невалидной формы
+
+    # Обработка невалидной формы
     def form_invalid(self, form):
         messages.error(self.request, 'Не удалось создать заказ. Исправьте ошибки.')
         return super().form_invalid(form)
 
-#Изменение статуса заказа
+
+# Изменение статуса заказа
 class OrderStatusUpdate(UpdateView):
     model = Order
     form_class = OrderStatusForm
     template_name = 'order_status_update.html'
     success_url = reverse_lazy('order_list')
 
-#Удаление заказа
+
+# Удаление заказа
 class OrderDelete(DeleteView):
     model = Order
     template_name = 'order_delete.html'
     success_url = reverse_lazy('order_list')
 
-#Отчет по выручке с оплаченных заказов
+
+# Отчет по выручке с оплаченных заказов
 class OrderRevenue(TemplateView):
     template_name = 'revenue.html'
 
@@ -84,7 +90,8 @@ class OrderRevenue(TemplateView):
 
         return context
 
-#Редактирование заказа
+
+# Редактирование заказа
 class OrderUpdate(UpdateView):
     model = Order
     template_name = 'order_edit.html'
@@ -95,13 +102,13 @@ class OrderUpdate(UpdateView):
         order = self.get_object()
         updated_items = []
 
-        #Получает данные из формы
+        # Получает данные из формы
         names = request.POST.getlist('dish_name')
         prices = request.POST.getlist('dish_price')
         quantities = request.POST.getlist('dish_quantity')
         deletes = request.POST.getlist('dish_delete')
 
-        #Обрабатывает существующие блюда
+        # Обрабатывает существующие блюда
         for i in range(len(names)):
             if str(i) not in deletes:
                 try:
@@ -113,7 +120,7 @@ class OrderUpdate(UpdateView):
                 except (ValueError, IndexError):
                     continue
 
-        #Добавляет новое блюдо
+        # Добавляет новое блюдо
         new_name = request.POST.get('new_dish_name', '').strip()
         new_price = request.POST.get('new_dish_price')
         if new_name and new_price:
