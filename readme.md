@@ -103,7 +103,7 @@
 - PostgreSQL (или SQLite для разработки)
 - Virtualenv
 2. Установка зависимостей\
-- git clone - клонирование репозитория
+- git clone https://github.com/VanyaSHEIKH/DjangoProjectForCafe - клонирование репозитория
 - cd cafe 
 - python -m venv venv - создание виртуального окружения
 - pip install -r requirements.txt - установка необходимых зависимостей
@@ -147,7 +147,7 @@ http://127.0.0.1:8000/api/
 
 **Проект опубликован на ***GitHub*** по следующему адресу:**
 
-https://github.com/VanyaSHEIKH/Pereval
+https://github.com/VanyaSHEIKH/DjangoProjectForCafe
 ***
 
 **Автор:**
